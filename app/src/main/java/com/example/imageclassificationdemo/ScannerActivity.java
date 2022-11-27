@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +51,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ScannerActivity extends Fragment {
+public class            ScannerActivity extends Fragment {
 
     protected Interpreter tflite;
     private MappedByteBuffer tfliteModel;
@@ -62,6 +64,7 @@ public class ScannerActivity extends Fragment {
     private static final float IMAGE_STD = 1.0f;
     private static final float PROBABILITY_MEAN = 0.0f;
     private static final float PROBABILITY_STD = 255.0f;
+
     private Bitmap bitmap;
     private List<String> labels;
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -69,16 +72,17 @@ public class ScannerActivity extends Fragment {
     ImageView imageView;
     Uri imageuri;
     Button buclassify,btngallery,btncamera;
-    TextView classitext;
-
+    TextView classitext,textClassType,textClassPercentage,textRemarks,textDisease;
+    LinearLayout layoutScanInfo;
     String a,b,c,d;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_scanner);
-
+        df.format(1234123);
     }
+
 
 
     @Override
@@ -91,9 +95,12 @@ public class ScannerActivity extends Fragment {
         buclassify.setEnabled(false);
         btngallery=(Button)root.findViewById(R.id.btn_gallery);
         btncamera=(Button)root.findViewById(R.id.btncamera);
-
+        textClassType = root.findViewById(R.id.textClassType);
+        textClassPercentage = root.findViewById(R.id.textClassPercentage);
+        textRemarks = root.findViewById(R.id.textRemarks);
+        textDisease = root.findViewById(R.id.textDisease);
         classitext=(TextView)root.findViewById(R.id.classifytext);
-
+        layoutScanInfo = root.findViewById(R.id.layoutScanInfo);
         btngallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,111 +120,50 @@ public class ScannerActivity extends Fragment {
                 }
         });
 
-        buclassify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a="";b="";c="";d="";
-                float broccoli= getClassification("broccoli.tflite","broccoli.txt");
-                float bokchoy= getClassification("bokchoy.tflite","bokchoy.txt");
-                float cabbage= getClassification("cabbage.tflite","cabbage.txt");
-                float lettuce= getClassification("lettuce.tflite","lettuce.txt");
+        buclassify.setOnClickListener(v -> {
+            a="";b="";c="";d="";
+            float broccoli= getClassification("broccoli.tflite","broccoli.txt");
+            float bokchoy= getClassification("bokchoy.tflite","bokchoy.txt");
+            float cabbage= getClassification("cabbage.tflite","cabbage.txt");
+            float lettuce= getClassification("lettuce.tflite","lettuce.txt");
 
-                if((bokchoy >=broccoli) && (bokchoy>=cabbage) && (bokchoy>=lettuce))
-                {
-                    String str = a;
-                    String[] parts = str.split("_");
-                    String result="";
-                    result="        "+"Bok Choy (Brassica chinensis)";
-                    if(parts[1].equals("a"))
-                    {
-                        result=result+" \n\nClass: A"+"\nRemarks: Marketable in both highlands to lowlands places";
-                    }
-                    else if(parts[1].equals("disease"))
-                    {
-                         if(parts[2].equals("pests") || parts[2].equals("white rust"))
-                             result=result+"\n\nClass: B"+"\nRemarks: Marketable in local place only"+"\nWith signs of "+parts[2];
-                         else
-                             result=result+"\n\nClass: C"+"\nRemarks: Rejected"+"\nWith signs of "+parts[2];
-                    }
-                    classitext.setText(result+"\nConfidence level: "+df.format(bokchoy*100)+"%");
-                }
-                else if((broccoli>=bokchoy) && (broccoli>=cabbage) && (broccoli>=lettuce))
-                {
+            if((bokchoy >=broccoli) && (bokchoy>=cabbage) && (bokchoy>=lettuce))
+            {
+                String str = a;
+                String[] parts = str.split("_");
+                classitext.setText("Bok Choy (Brassica chinensis)");
+                displayScanInfo(provideResult(bokchoy*100,parts[2]));
+            }
+            else if((broccoli>=bokchoy) && (broccoli>=cabbage) && (broccoli>=lettuce))
+            {
 
-                    String str = b;
-                    String[] parts = str.split("_");
-                    String result="";
-                    result="Broccoli (Brassica Oleracea var. italica)";
-                    if(parts[1].equals("a"))
-                    {
-                        result=result+" \n\nClass: A" + "\nRemarks: Marketable in both highlands to lowlands places";
-                    }
-                    if(parts[1].equals("b"))
-                    {
-                        result=result+" \n\nClass: B";
-                    }
-                    else if(parts[1].equals("disease"))
-                    {
-                        if(parts[2].equals("white rust"))
-                            result=result+" \n\nClass: B"+"\nRemarks: Marketable in local place only" +"\nWith signs of "+parts[2];
-                        else
-                            result=result+" \n\nClass: C"+"\nRemarks: Rejected"+"\nDisease: With signs of "+parts[2];
-                    }
-                   // classitext.setText(result);
-                    classitext.setText(result+"\nConfidence level: "+df.format(broccoli*100)+"%");
-                }
-                else  if((cabbage >=broccoli) && (cabbage >= bokchoy) && (cabbage>=lettuce))
-                {
-                    String str = c;
-                    String[] parts = str.split("_");
-                    String result="";
-                    result="Cabbage(Brassica oleracea var. capitata)";
-                    if(parts[1].equals("a"))
-                    {
-                        result=result+" \n\nClass A "+"\nRemarks: Marketable in both highlands to lowlands places";
-                    }
-                    else if(parts[1].equals("disease"))
-                    {
-                        if(parts[2].equals("black rot"))
-                            result=result+" \n\nClass: B"+"\nRemarks: Marketable in local place only"+"\nWith signs of "+parts[2];
-                        else
-                            result=result+" \n\nClass: C"+"\nRemarks: Rejected"+"\nDisease: With signs of "+parts[2];
-                    }
-                   // classitext.setText(result);
-                    classitext.setText(result+"\nConfidence level: "+df.format(cabbage*100)+"%");
-
-
-
-                }
-                else  if((lettuce >= broccoli) && (lettuce>=cabbage) && (lettuce>=bokchoy))
-                {
-                    String str = d;
-                    String[] parts = str.split("_");
-                    String result="";
-                    result="        "+"Lettuce (Lactuca sativa)";
-                    if(parts[1].equals("a"))
-                    {
-                        result=result+" \n\nClass: A "+"\nRemarks: Marketable in both highlands to lowlands places";
-                    }
-                    else if(parts[1].equals("disease"))
-                    {
-                        if(parts[2].equals("big vein") || parts[2].equals("leaf spot"))
-                            result=result+" \n\nClass: B "+"\nRemarks: Marketable in local place only" +"\nDisease: With signs of "+parts[2];
-                        else
-                            result=result+" \n\nClass: C "+"\nRemarks: Rejected"+"\nDisease: With signs of "+parts[2];
-                    }
-                    //classitext.setText(result);
-                    classitext.setText(result+"\nConfidence level: "+df.format(lettuce*100)+"%");
-
-                }
-
-
-                if(broccoli<0.6 || cabbage<0.6 || bokchoy<0.6 || lettuce<0.6 ){
-                    classitext.setText("Unknown image, check image quality and make sure it is one of featured vegetables...");
-                }
+                String str = b;
+                String[] parts = str.split("_");
+                classitext.setText("Broccoli (Brassica Oleracea var. italica)");
+                displayScanInfo(provideResult(broccoli*100,parts[2]));
+                //classitext.setText(result+"\nConfidence level: "+ df.format(broccoli*100)+"%");
+            }
+            else  if((cabbage >=broccoli) && (cabbage >= bokchoy) && (cabbage>=lettuce))
+            {
+                String str = c;
+                String[] parts = str.split("_");
+                classitext.setText("Cabbage(Brassica oleracea var. capitata)");
+                displayScanInfo(provideResult(broccoli*100,parts[2]));
 
 
             }
+            else  if((lettuce >= broccoli) && (lettuce>=cabbage) && (lettuce>=bokchoy))
+            {
+                String str = d;
+                String[] parts = str.split("_");
+                classitext.setText("Lettuce (Lactuca sativa)");
+                displayScanInfo(provideResult(broccoli*100,parts[2]));
+            }
+            if(broccoli<0.6 || cabbage<0.6 || bokchoy<0.6 || lettuce<0.6 ){
+                classitext.setText("Unknown image, check image quality and make sure it is one of featured vegetables...");
+                layoutScanInfo.setVisibility(View.GONE);
+            }
+
         });
 
         return root;
@@ -370,7 +316,29 @@ public class ScannerActivity extends Fragment {
             imageView.setImageBitmap(bitmap);
             buclassify.setEnabled(true);
         }
+    }
+    private void displayScanInfo(ScanResult scanResult) {
+        layoutScanInfo.setVisibility(View.VISIBLE);
+        if (scanResult.classPercent <= 60) {
+            textClassPercentage.setTextColor(Color.parseColor("#D32F2F"));
+        }
+        textClassType.setText(scanResult.getClassType());
+        textClassPercentage.setText(scanResult.getClassPercent()+"%");
+        textRemarks.setText(scanResult.getRemarks());
+        textDisease.setText(scanResult.getDisease());
 
+    }
+    private ScanResult provideResult(float confidenceLevel,String disease) {
+        ScanResult scanResult = new ScanResult();
+        if (confidenceLevel <= 60) {
+            scanResult = new ScanResult("C",confidenceLevel,"Rejected",disease);
+        } else if (confidenceLevel > 60 && confidenceLevel < 80) {
+
+            scanResult = new ScanResult("B",confidenceLevel,"Marketable in local place only",disease);
+        } else if(confidenceLevel >= 80) {
+            scanResult = new ScanResult("C",confidenceLevel,"Marketable","");
+        }
+        return scanResult;
     }
 }
 

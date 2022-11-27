@@ -1,37 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/nice"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/classifytext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="Select Image Source"
-        android:textSize="20dp"
-        android:textStyle="bold">
+        android:text="@string/select_image_source"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/layoutScanInfo"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Class: "/>
+            <TextView
+                android:id="@+id/textClassType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text="C"
+               />
 
-    </TextView>
+            <TextView
+                android:id="@+id/textClassPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+               />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remarks: "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rejected"
+                android:id="@+id/textRemarks"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disease: "/>
+            <TextView
+                android:id="@+id/textDisease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disease Type"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
 
     <ImageView
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:padding="7dp"
-        android:layout_below="@+id/classifytext"
+        android:layout_margin="10dp"
         android:src="@color/colorAccent"
         android:background="@drawable/gradient"
         android:scaleType="fitXY"
-        android:layout_centerHorizontal="true"
         android:id="@+id/image">
     </ImageView>
 
@@ -40,28 +96,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="5dp"
         android:background="#fff"
+        android:layout_margin="5dp"
         android:text="Gallery"
-        android:textColor="#000"></Button>
+        android:textColor="#000" />
 
     <Button
         android:id="@+id/btncamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_gallery"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="5dp"
         android:background="#fff"
         android:text="Camera"
-        android:textColor="#000"></Button>
+        android:textColor="#000" />
 
 
     <Button
@@ -69,13 +116,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btncamera"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_margin="5dp"
         android:background="#fff"
         android:text="Check Quality"
-        android:textColor="#000"></Button>
+        android:textColor="#000" />
 
-</RelativeLayout>
+</LinearLayout>

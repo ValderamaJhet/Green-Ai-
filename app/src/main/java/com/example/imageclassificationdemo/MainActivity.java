@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 navDrawerLayoutBinding.navDrawer,
                 toolbarLayoutBinding.toolbar,
-                R.string.open_navigation_drawer,
+                                R.string.open_navigation_drawer,
                 R.string.close_navigation_drawer
         );
 
