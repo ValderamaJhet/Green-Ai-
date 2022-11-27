@@ -1,0 +1,7 @@
+Lettuce_A
+Lettuce_Disease_Big Vein
+Lettuce_Disease_Downy Mildew
+Lettuce_Disease_leaf drop
+Lettuce_Disease_leaf spot
+Lettuce_Disease_Powder Mildew
+Lettuce_Disease_Soft Rot

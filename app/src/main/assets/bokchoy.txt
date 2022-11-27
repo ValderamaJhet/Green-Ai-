@@ -1,0 +1,6 @@
+Bokchoy_A
+Bokchoy_Disease_Downy mildew
+Bokchoy_Disease_leaf spot
+Bokchoy_Disease_Pests
+Bokchoy_Disease_Soft Rot
+Bokchoy_Disease_White Rust

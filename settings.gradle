@@ -1,0 +1,2 @@
+rootProject.name='Vegetable Classification'
+include ':app'

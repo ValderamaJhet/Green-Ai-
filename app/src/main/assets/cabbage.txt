@@ -1,0 +1,5 @@
+Cabbage_A
+Cabbage_Disease_Bacterial Soft Rot
+Cabbage_Disease_Black Rot
+Cabbage_Disease_Downy mildew
+Cabbage_Disease_leaf spot
