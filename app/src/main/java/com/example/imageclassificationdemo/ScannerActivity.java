@@ -132,7 +132,12 @@ public class            ScannerActivity extends Fragment {
                 String str = a;
                 String[] parts = str.split("_");
                 classitext.setText("Bok Choy (Brassica chinensis)");
-                displayScanInfo(provideResult(bokchoy*100,parts[2]));
+                if (parts[1].equals('a')) {
+                    displayScanInfo(provideResult(bokchoy*100,"None"));
+                } else if (parts[1].equals("disease")) {
+                    displayScanInfo(provideResult(bokchoy*100,parts[2]));
+                }
+
             }
             else if((broccoli>=bokchoy) && (broccoli>=cabbage) && (broccoli>=lettuce))
             {
@@ -140,7 +145,11 @@ public class            ScannerActivity extends Fragment {
                 String str = b;
                 String[] parts = str.split("_");
                 classitext.setText("Broccoli (Brassica Oleracea var. italica)");
-                displayScanInfo(provideResult(broccoli*100,parts[2]));
+                if (parts[1].equals('a')) {
+                    displayScanInfo(provideResult(broccoli*100,"None"));
+                } else if (parts[1].equals("disease")) {
+                    displayScanInfo(provideResult(broccoli*100,parts[2]));
+                }
                 //classitext.setText(result+"\nConfidence level: "+ df.format(broccoli*100)+"%");
             }
             else  if((cabbage >=broccoli) && (cabbage >= bokchoy) && (cabbage>=lettuce))
@@ -148,7 +157,11 @@ public class            ScannerActivity extends Fragment {
                 String str = c;
                 String[] parts = str.split("_");
                 classitext.setText("Cabbage(Brassica oleracea var. capitata)");
-                displayScanInfo(provideResult(broccoli*100,parts[2]));
+                if (parts[1].equals('a')) {
+                    displayScanInfo(provideResult(cabbage*100,"None"));
+                } else if (parts[1].equals("disease")) {
+                    displayScanInfo(provideResult(cabbage*100,parts[2]));
+                }
 
 
             }
